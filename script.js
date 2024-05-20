@@ -35,6 +35,7 @@ function getModeName(mode) {
 
 function generateQuestion() {
     if (questionCount < totalQuestions) {
+        sounds.start.play();
         questionCount++;
         const min1 = parseInt(document.getElementById('min1').value);
         const max1 = parseInt(document.getElementById('max1').value);
@@ -98,19 +99,20 @@ function checkAnswer(selectedChoice) {
         correctAnswer,
         userAnswer,
         date,
-        timeTaken
+        timeTaken,
+        correct: userAnswer === correctAnswer ? '正解' : '不正解'
     };
 
     if (userAnswer === correctAnswer) {
         resultElement.innerText = '正解！';
         resultElement.className = 'correct-answer';
         sounds.correct.play();
-        resultRecord.correct = true;
+        resultRecord.correct = '正解';
     } else {
         resultElement.innerText = '残念...！';
         resultElement.className = 'incorrect-answer';
         sounds.wrong.play();
-        resultRecord.correct = false;
+        resultRecord.correct = '不正解';
     }
     correctAnswers.push(resultRecord);
 
@@ -135,11 +137,11 @@ function showResults() {
     const resultElement = document.getElementById('result');
     const summaryElement = document.getElementById('summary');
     resultElement.innerText = 'ゲーム終了！結果：';
-    let correctCount = correctAnswers.filter(answer => answer.correct).length;
+    let correctCount = correctAnswers.filter(answer => answer.correct === '正解').length;
     let incorrectCount = correctAnswers.length - correctCount;
     resultElement.innerHTML += `<br>正解：${correctCount} 問<br>不正解：${incorrectCount} 問`;
 
-    let summaryHTML = '<h2>正誤結果</h2><table><tr><th>日時</th><th>問題</th><th>正解</th><th>あなたの答え</th><th>所要時間 (秒)</th></tr>';
+    let summaryHTML = '<h2>正誤結果</h2><table><tr><th>日時</th><th>問題</th><th>正解</th><th>あなたの答え</th><th>所要時間 (秒)</th><th>結果</th></tr>';
     correctAnswers.forEach(record => {
         summaryHTML += `<tr>
             <td>${record.date}</td>
@@ -147,6 +149,7 @@ function showResults() {
             <td>${record.correctAnswer}</td>
             <td>${record.userAnswer}</td>
             <td>${record.timeTaken.toFixed(2)}</td>
+            <td>${record.correct}</td>
         </tr>`;
     });
     summaryHTML += '</table>';
