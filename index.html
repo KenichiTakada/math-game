@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算練習ゲーム</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>計算練習ゲーム</h1>
+        <div class="settings">
+            <label for="mode">計算モード:</label>
+            <select id="mode" onchange="updateMode()">
+                <option value="multiplication">掛け算</option>
+                <option value="addition">足し算</option>
+                <option value="subtraction">引き算</option>
+            </select>
+            <div>
+                <label for="min1">1つ目の数字 最小値:</label>
+                <input type="number" id="min1" value="1" min="1">
+                <label for="max1">最大値:</label>
+                <input type="number" id="max1" value="9" min="1">
+            </div>
+            <div>
+                <label for="min2">2つ目の数字 最小値:</label>
+                <input type="number" id="min2" value="1" min="1">
+                <label for="max2">最大値:</label>
+                <input type="number" id="max2" value="9" min="1">
+            </div>
+        </div>
+        <div id="current-mode">現在の計算モード: 掛け算</div>
+        <div id="question">問題がここに表示されます</div>
+        <div id="choices">
+            <button class="choice" onclick="checkAnswer(0)">選択肢 1</button>
+            <button class="choice" onclick="checkAnswer(1)">選択肢 2</button>
+            <button class="choice" onclick="checkAnswer(2)">選択肢 3</button>
+            <button class="choice" onclick="checkAnswer(3)">選択肢 4</button>
+        </div>
+        <div id="result"></div>
+        <div id="summary"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
