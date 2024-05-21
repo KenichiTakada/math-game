@@ -31,7 +31,7 @@ html {
     overflow-y: auto; /* ゲームコンテナ内の垂直スクロールを有効化 */
 }
 
-.accordion {
+.open-button {
     background-color: #ffcccb;
     color: #444;
     cursor: pointer;
@@ -42,18 +42,49 @@ html {
     outline: none;
     transition: 0.4s;
     border-top: 2px solid #f08080;
+    margin-top: 10px;
 }
 
-.active, .accordion:hover {
+.open-button:hover {
     background-color: #ffaaaa; 
 }
 
-.panel {
-    padding: 0 18px;
-    background-color: white;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .menu h2 {
