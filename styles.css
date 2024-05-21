@@ -21,13 +21,14 @@ html {
     border-radius: 10px;
     overflow: hidden;
     margin: auto;
+    margin-bottom: 25%; /* 25%分の余白を追加 */
 }
 
 .game-container {
     flex: 1;
     padding: 20px;
     text-align: center;
-    overflow-y: auto;  /* ゲームコンテナ内の垂直スクロールを有効化 */
+    overflow-y: auto; /* ゲームコンテナ内の垂直スクロールを有効化 */
 }
 
 .menu-toggle {
@@ -52,7 +53,7 @@ html {
 
 .menu.show {
     max-height: 300px;
-    overflow-y: auto;  /* メニュー内の垂直スクロールを有効化 */
+    overflow-y: auto; /* メニュー内の垂直スクロールを有効化 */
 }
 
 .menu h2 {
