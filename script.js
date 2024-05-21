@@ -76,4 +76,112 @@ function generateChoices() {
         } else {
             let wrongAnswer;
             do {
-               
+                wrongAnswer = getRandomInt(1, 100);
+            } while (wrongAnswer === correctAnswer || choices.includes(wrongAnswer));
+            choices.push(wrongAnswer);
+        }
+    }
+    const buttons = document.getElementsByClassName('choice');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerText = choices[i];
+    }
+}
+
+function checkAnswer(selectedChoice) {
+    const userAnswer = parseInt(document.getElementsByClassName('choice')[selectedChoice].innerText);
+    const resultElement = document.getElementById('result');
+    const endTime = new Date();
+    const timeTaken = (endTime - startTime) / 1000;
+    const date = endTime.toLocaleString();
+
+    let resultRecord = {
+        question: `${num1} ${getSymbol(currentMode)} ${num2}`,
+        correctAnswer,
+        userAnswer,
+        date,
+        timeTaken,
+        correct: userAnswer === correctAnswer ? '正解' : '不正解'
+    };
+
+    if (userAnswer === correctAnswer) {
+        resultElement.innerText = '正解！';
+        resultElement.className = 'correct-answer';
+        sounds.correct.play();
+    } else {
+        resultElement.innerText = '残念...！';
+        resultElement.className = 'incorrect-answer';
+        sounds.wrong.play();
+    }
+    correctAnswers.push(resultRecord);
+
+    setTimeout(() => {
+        resultElement.innerText = '';
+        generateQuestion();
+    }, 2000);
+}
+
+function getSymbol(mode) {
+    switch (mode) {
+        case 'multiplication':
+            return '×';
+        case 'addition':
+            return '+';
+        case 'subtraction':
+            return '-';
+    }
+}
+
+function showResults() {
+    const resultElement = document.getElementById('result');
+    const summaryElement = document.getElementById('summary');
+    resultElement.innerText = 'ゲーム終了！結果：';
+    let correctCount = correctAnswers.filter(answer => answer.correct === '正解').length;
+    let incorrectCount = correctAnswers.length - correctCount;
+    resultElement.innerHTML += `<br>正解：${correctCount} 問<br>不正解：${incorrectCount} 問`;
+
+    let summaryHTML = '<h2>正誤結果</h2><table><tr><th>日時</th><th>問題</th><th>正解</th><th>あなたの答え</th><th>所要時間 (秒)</th><th>結果</th></tr>';
+    correctAnswers.forEach(record => {
+        summaryHTML += `<tr>
+            <td>${record.date}</td>
+            <td>${record.question}</td>
+            <td>${record.correctAnswer}</td>
+            <td>${record.userAnswer}</td>
+            <td>${record.timeTaken.toFixed(2)}</td>
+            <td>${record.correct}</td>
+        </tr>`;
+    });
+    summaryHTML += '</table>';
+    summaryElement.innerHTML = summaryHTML;
+}
+
+function downloadResults() {
+    const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果"];
+    let csvContent = "data:text/csv;charset=utf-8," 
+        + headers.join(",") + "\n"
+        + correctAnswers.map(record => [
+            record.date,
+            record.question,
+            record.correctAnswer,
+            record.userAnswer,
+            record.timeTaken.toFixed(2),
+            record.correct
+        ].join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('show');
+}
+
+window.onload = () => {
+    generateQuestion();
+};
