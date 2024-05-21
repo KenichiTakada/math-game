@@ -107,12 +107,10 @@ function checkAnswer(selectedChoice) {
         resultElement.innerText = '正解！';
         resultElement.className = 'correct-answer';
         sounds.correct.play();
-        resultRecord.correct = '正解';
     } else {
         resultElement.innerText = '残念...！';
         resultElement.className = 'incorrect-answer';
         sounds.wrong.play();
-        resultRecord.correct = '不正解';
     }
     correctAnswers.push(resultRecord);
 
@@ -156,7 +154,28 @@ function showResults() {
     summaryElement.innerHTML = summaryHTML;
 }
 
+function downloadResults() {
+    const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果"];
+    let csvContent = "data:text/csv;charset=utf-8," 
+        + headers.join(",") + "\n"
+        + correctAnswers.map(record => [
+            record.date,
+            record.question,
+            record.correctAnswer,
+            record.userAnswer,
+            record.timeTaken.toFixed(2),
+            record.correct
+        ].join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 window.onload = () => {
-    sounds.start.play();
     generateQuestion();
 };
