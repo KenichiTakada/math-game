@@ -22,27 +22,30 @@
             <div id="summary"></div>
             <button onclick="downloadResults()">結果をダウンロード</button>
         </div>
-        <button class="accordion">設定</button>
-        <div class="panel">
-            <div class="menu" id="menu">
-                <h2>設定</h2>
-                <label for="mode">計算モード:</label>
-                <select id="mode" onchange="updateMode()">
-                    <option value="multiplication">掛け算</option>
-                    <option value="addition">足し算</option>
-                    <option value="subtraction">引き算</option>
-                </select>
-                <div>
-                    <label for="min1">1つ目の数字 最小値:</label>
-                    <input type="number" id="min1" value="1" min="1">
-                    <label for="max1">最大値:</label>
-                    <input type="number" id="max1" value="9" min="1">
-                </div>
-                <div>
-                    <label for="min2">2つ目の数字 最小値:</label>
-                    <input type="number" id="min2" value="1" min="1">
-                    <label for="max2">最大値:</label>
-                    <input type="number" id="max2" value="9" min="1">
+        <button id="openModal" class="open-button">設定</button>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <div class="menu">
+                    <h2>設定</h2>
+                    <label for="mode">計算モード:</label>
+                    <select id="mode" onchange="updateMode()">
+                        <option value="multiplication">掛け算</option>
+                        <option value="addition">足し算</option>
+                        <option value="subtraction">引き算</option>
+                    </select>
+                    <div>
+                        <label for="min1">1つ目の数字 最小値:</label>
+                        <input type="number" id="min1" value="1" min="1">
+                        <label for="max1">最大値:</label>
+                        <input type="number" id="max1" value="9" min="1">
+                    </div>
+                    <div>
+                        <label for="min2">2つ目の数字 最小値:</label>
+                        <input type="number" id="min2" value="1" min="1">
+                        <label for="max2">最大値:</label>
+                        <input type="number" id="max2" value="9" min="1">
+                    </div>
                 </div>
             </div>
         </div>
