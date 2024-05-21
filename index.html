@@ -8,8 +8,22 @@
 </head>
 <body>
     <div class="container">
+        <div class="game-container">
+            <h1>計算練習ゲーム</h1>
+            <div id="current-mode">現在の計算モード: 掛け算</div>
+            <div id="question">問題がここに表示されます</div>
+            <div id="choices">
+                <button class="choice" onclick="checkAnswer(0)">選択肢 1</button>
+                <button class="choice" onclick="checkAnswer(1)">選択肢 2</button>
+                <button class="choice" onclick="checkAnswer(2)">選択肢 3</button>
+                <button class="choice" onclick="checkAnswer(3)">選択肢 4</button>
+            </div>
+            <div id="result"></div>
+            <div id="summary"></div>
+            <button onclick="downloadResults()">結果をダウンロード</button>
+        </div>
         <div class="menu-toggle" onclick="toggleMenu()">設定を表示/非表示</div>
-        <div class="menu" id="menu">
+        <div class="menu hidden" id="menu">
             <h2>設定</h2>
             <label for="mode">計算モード:</label>
             <select id="mode" onchange="updateMode()">
@@ -29,20 +43,6 @@
                 <label for="max2">最大値:</label>
                 <input type="number" id="max2" value="9" min="1">
             </div>
-        </div>
-        <div class="game-container">
-            <h1>計算練習ゲーム</h1>
-            <div id="current-mode">現在の計算モード: 掛け算</div>
-            <div id="question">問題がここに表示されます</div>
-            <div id="choices">
-                <button class="choice" onclick="checkAnswer(0)">選択肢 1</button>
-                <button class="choice" onclick="checkAnswer(1)">選択肢 2</button>
-                <button class="choice" onclick="checkAnswer(2)">選択肢 3</button>
-                <button class="choice" onclick="checkAnswer(3)">選択肢 4</button>
-            </div>
-            <div id="result"></div>
-            <div id="summary"></div>
-            <button onclick="downloadResults()">結果をダウンロード</button>
         </div>
     </div>
     <script src="script.js"></script>
