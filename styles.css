@@ -1,12 +1,14 @@
 body {
     font-family: 'Comic Sans MS', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: #f0f8ff;
-    overflow: hidden;  /* Prevent body scrolling */
+    height: 100%;
+    overflow: auto; /* 画面全体のスクロールを許可 */
+}
+
+html {
+    height: 100%;
+    overflow: auto; /* 画面全体のスクロールを許可 */
 }
 
 .container {
@@ -18,14 +20,14 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
-    height: 100vh;  /* Full viewport height */
+    margin: auto;
 }
 
 .game-container {
     flex: 1;
     padding: 20px;
     text-align: center;
-    overflow-y: auto;  /* Enable vertical scrolling */
+    overflow-y: auto;  /* ゲームコンテナ内の垂直スクロールを有効化 */
 }
 
 .menu-toggle {
@@ -50,7 +52,7 @@ body {
 
 .menu.show {
     max-height: 300px;
-    overflow-y: auto;  /* Enable vertical scrolling within menu */
+    overflow-y: auto;  /* メニュー内の垂直スクロールを有効化 */
 }
 
 .menu h2 {
@@ -147,7 +149,6 @@ button:hover {
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
-        height: 100vh;
     }
 
     .menu {
