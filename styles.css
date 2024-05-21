@@ -31,29 +31,29 @@ html {
     overflow-y: auto; /* ゲームコンテナ内の垂直スクロールを有効化 */
 }
 
-.menu-toggle {
+.accordion {
     background-color: #ffcccb;
-    padding: 10px;
+    color: #444;
     cursor: pointer;
+    padding: 18px;
+    width: 100%;
     text-align: center;
+    border: none;
+    outline: none;
+    transition: 0.4s;
     border-top: 2px solid #f08080;
 }
 
-.menu {
-    background-color: #ffcccb;
-    padding: 20px;
-    transition: max-height 0.3s ease;
+.active, .accordion:hover {
+    background-color: #ffaaaa; 
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: white;
     max-height: 0;
     overflow: hidden;
-}
-
-.menu.hidden {
-    max-height: 0;
-}
-
-.menu.show {
-    max-height: 300px;
-    overflow-y: auto; /* メニュー内の垂直スクロールを有効化 */
+    transition: max-height 0.2s ease-out;
 }
 
 .menu h2 {
@@ -165,7 +165,7 @@ button:hover {
     }
 
     .choice {
-        padding: 30px;
+        padding: 15px;  /* 画面が小さいときに選択肢ボタンの内側に余白を追加 */
         font-size: 1.2em;
     }
 }
