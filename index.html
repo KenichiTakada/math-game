@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <div class="menu">
+        <div class="menu-toggle" onclick="toggleMenu()">設定を表示/非表示</div>
+        <div class="menu" id="menu">
             <h2>設定</h2>
             <label for="mode">計算モード:</label>
             <select id="mode" onchange="updateMode()">
