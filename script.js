@@ -113,11 +113,18 @@ function generateChoices() {
     const buttons = document.getElementsByClassName('choice');
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].innerText = choices[i];
+        buttons[i].classList.remove('selected'); // 選択状態を解除
     }
 }
 
 function checkAnswer(selectedChoice) {
-    const userAnswer = parseInt(document.getElementsByClassName('choice')[selectedChoice].innerText);
+    const buttons = document.getElementsByClassName('choice');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('selected'); // 他のボタンの選択状態を解除
+    }
+    buttons[selectedChoice].classList.add('selected'); // 選択状態を追加
+
+    const userAnswer = parseInt(buttons[selectedChoice].innerText);
     const resultElement = document.getElementById('result');
     const endTime = new Date();
     const timeTaken = (endTime - startTime) / 1000;
@@ -147,12 +154,13 @@ function checkAnswer(selectedChoice) {
         sounds.wrong.play();
     }
 
-    resultElement.appendChild(imgElement);
+    document.body.appendChild(imgElement);
 
     correctAnswers.push(resultRecord);
 
     setTimeout(() => {
         resultElement.innerText = '';
+        document.body.removeChild(imgElement);
         generateQuestion();
     }, 2000);
 }
