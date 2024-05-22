@@ -10,8 +10,37 @@ const sounds = {
     wrong: new Audio('wrong.mp3')
 };
 
+const correctImages = [
+    {src: 'images/correct1.png', weight: 1},
+    {src: 'images/correct2.png', weight: 1},
+    {src: 'images/correct3.png', weight: 1},
+    {src: 'images/correct4.png', weight: 1},
+    {src: 'images/correct5.png', weight: 1}
+];
+
+const wrongImages = [
+    {src: 'images/wrong1.png', weight: 1},
+    {src: 'images/wrong2.png', weight: 1},
+    {src: 'images/wrong3.png', weight: 1},
+    {src: 'images/wrong4.png', weight: 1},
+    {src: 'images/wrong5.png', weight: 1}
+];
+
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomImage(images) {
+    const totalWeight = images.reduce((acc, image) => acc + image.weight, 0);
+    const randomNum = Math.random() * totalWeight;
+    let sum = 0;
+
+    for (let image of images) {
+        sum += image.weight;
+        if (randomNum <= sum) {
+            return image.src;
+        }
+    }
 }
 
 function updateMode() {
@@ -103,6 +132,11 @@ function checkAnswer(selectedChoice) {
         correct: userAnswer === correctAnswer ? '正解' : '不正解'
     };
 
+    const imgSrc = userAnswer === correctAnswer ? getRandomImage(correctImages) : getRandomImage(wrongImages);
+    const imgElement = document.createElement('img');
+    imgElement.src = imgSrc;
+    imgElement.className = 'pop-out';
+
     if (userAnswer === correctAnswer) {
         resultElement.innerText = '正解！';
         resultElement.className = 'correct-answer';
@@ -112,6 +146,9 @@ function checkAnswer(selectedChoice) {
         resultElement.className = 'incorrect-answer';
         sounds.wrong.play();
     }
+
+    resultElement.appendChild(imgElement);
+
     correctAnswers.push(resultRecord);
 
     setTimeout(() => {
