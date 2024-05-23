@@ -15,15 +15,10 @@ const correctImages = [
     {src: 'images/correct2.png', weight: 1},
     {src: 'images/correct3.png', weight: 1},
     {src: 'images/correct4.png', weight: 1},
-    {src: 'images/correct5.png', weight: 1}
-];
-
-const wrongImages = [
-    {src: 'images/wrong1.png', weight: 1},
-    {src: 'images/wrong2.png', weight: 1},
-    {src: 'images/wrong3.png', weight: 1},
-    {src: 'images/wrong4.png', weight: 1},
-    {src: 'images/wrong5.png', weight: 1}
+    {src: 'images/correct5.png', weight: 1},
+    {src: 'images/correct6.png', weight: 1},
+    {src: 'images/correct7.png', weight: 1},
+    {src: 'images/correct8.png', weight: 1}
 ];
 
 function getRandomInt(min, max) {
@@ -117,20 +112,6 @@ function generateChoices() {
     }
 }
 
-function submitResult(resultRecord) {
-  const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのURLを入力
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(resultRecord)
-  })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-}
-
 function checkAnswer(selectedChoice) {
     const buttons = document.getElementsByClassName('choice');
     for (let i = 0; i < buttons.length; i++) {
@@ -154,14 +135,11 @@ function checkAnswer(selectedChoice) {
         mode: getModeName(currentMode)
     };
 
-    submitResult(resultRecord); // 結果をGoogleスプレッドシートに送信
-
-    const imgSrc = userAnswer === correctAnswer ? getRandomImage(correctImages) : getRandomImage(wrongImages);
     const imgElement = document.createElement('img');
-    imgElement.src = imgSrc;
-    imgElement.className = 'pop-out';
-
     if (userAnswer === correctAnswer) {
+        const imgSrc = getRandomImage(correctImages);
+        imgElement.src = imgSrc;
+        imgElement.className = 'pop-out';
         resultElement.innerText = '正解！';
         resultElement.className = 'correct-answer';
         sounds.correct.play();
@@ -171,14 +149,18 @@ function checkAnswer(selectedChoice) {
         sounds.wrong.play();
     }
 
-    document.body.appendChild(imgElement);
+    if (userAnswer === correctAnswer) {
+        document.body.appendChild(imgElement);
+    }
 
     correctAnswers.push(resultRecord);
 
     setTimeout(() => {
         resultElement.innerText = '';
-        document.body.removeChild(imgElement);
-        simulateTap(); // 空白部分をタップする動作をシミュレート
+        if (userAnswer === correctAnswer) {
+            document.body.removeChild(imgElement);
+        }
+        simulateTapOnQuestion(); // 問題部分をタップする動作をシミュレート
         generateQuestion();
     }, 2000);
 }
@@ -241,13 +223,29 @@ function downloadResults() {
     document.body.removeChild(link);
 }
 
-function simulateTap() {
+function sendResultsToGoogleSheet() {
+    const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのURLを入力
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(correctAnswers)
+    };
+    fetch(url, options)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+}
+
+function simulateTapOnQuestion() {
+    const questionElement = document.getElementById('question');
     const event = new MouseEvent('click', {
         view: window,
         bubbles: true,
         cancelable: true
     });
-    document.body.dispatchEvent(event);
+    questionElement.dispatchEvent(event);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
