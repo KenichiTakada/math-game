@@ -117,6 +117,18 @@ function generateChoices() {
     }
 }
 
+function submitResult(resultRecord) {
+  const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのURLを入力
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    payload: JSON.stringify(resultRecord)
+  };
+  UrlFetchApp.fetch(url, options);
+}
+
 function checkAnswer(selectedChoice) {
     const buttons = document.getElementsByClassName('choice');
     for (let i = 0; i < buttons.length; i++) {
@@ -136,8 +148,11 @@ function checkAnswer(selectedChoice) {
         userAnswer,
         date,
         timeTaken,
-        correct: userAnswer === correctAnswer ? '正解' : '不正解'
+        result: userAnswer === correctAnswer ? '正解' : '不正解',
+        mode: getModeName(currentMode)
     };
+
+    submitResult(resultRecord); // 結果をGoogleスプレッドシートに送信
 
     const imgSrc = userAnswer === correctAnswer ? getRandomImage(correctImages) : getRandomImage(wrongImages);
     const imgElement = document.createElement('img');
@@ -161,6 +176,7 @@ function checkAnswer(selectedChoice) {
     setTimeout(() => {
         resultElement.innerText = '';
         document.body.removeChild(imgElement);
+        simulateTap(); // 空白部分をタップする動作をシミュレート
         generateQuestion();
     }, 2000);
 }
@@ -184,7 +200,7 @@ function showResults() {
     let incorrectCount = correctAnswers.length - correctCount;
     resultElement.innerHTML += `<br>正解：${correctCount} 問<br>不正解：${incorrectCount} 問`;
 
-    let summaryHTML = '<h2>正誤結果</h2><table><tr><th>日時</th><th>問題</th><th>正解</th><th>あなたの答え</th><th>所要時間 (秒)</th><th>結果</th></tr>';
+    let summaryHTML = '<h2>正誤結果</h2><table><tr><th>日時</th><th>問題</th><th>正解</th><th>あなたの答え</th><th>所要時間 (秒)</th><th>結果</th><th>モード</th></tr>';
     correctAnswers.forEach(record => {
         summaryHTML += `<tr>
             <td>${record.date}</td>
@@ -192,7 +208,8 @@ function showResults() {
             <td>${record.correctAnswer}</td>
             <td>${record.userAnswer}</td>
             <td>${record.timeTaken.toFixed(2)}</td>
-            <td>${record.correct}</td>
+            <td>${record.result}</td>
+            <td>${record.mode}</td>
         </tr>`;
     });
     summaryHTML += '</table>';
@@ -200,7 +217,7 @@ function showResults() {
 }
 
 function downloadResults() {
-    const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果"];
+    const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果", "モード"];
     let csvContent = "data:text/csv;charset=utf-8," 
         + headers.join(",") + "\n"
         + correctAnswers.map(record => [
@@ -209,7 +226,8 @@ function downloadResults() {
             record.correctAnswer,
             record.userAnswer,
             record.timeTaken.toFixed(2),
-            record.correct
+            record.result,
+            record.mode
         ].join(",")).join("\n");
 
     const encodedUri = encodeURI(csvContent);
@@ -219,6 +237,15 @@ function downloadResults() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function simulateTap() {
+    const event = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+    });
+    document.body.dispatchEvent(event);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
