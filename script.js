@@ -127,7 +127,13 @@ function submitResult(resultRecord) {
     body: JSON.stringify(resultRecord)
   })
   .then(response => response.json())
-  .then(data => console.log(data))
+  .then(data => {
+    if (data.status === 'error') {
+      console.error('Error:', data.message);
+    } else {
+      console.log('Success:', data);
+    }
+  })
   .catch(error => console.error('Error:', error));
 }
 
@@ -154,7 +160,7 @@ function checkAnswer(selectedChoice) {
         mode: getModeName(currentMode)
     };
 
-    submitResult(resultRecord); // 結果をGoogleスプレッドシートに送信
+    correctAnswers.push(resultRecord);
 
     const imgSrc = userAnswer === correctAnswer ? getRandomImage(correctImages) : getRandomImage(wrongImages);
     const imgElement = document.createElement('img');
@@ -172,8 +178,6 @@ function checkAnswer(selectedChoice) {
     }
 
     document.body.appendChild(imgElement);
-
-    correctAnswers.push(resultRecord);
 
     setTimeout(() => {
         resultElement.innerText = '';
@@ -216,6 +220,9 @@ function showResults() {
     });
     summaryHTML += '</table>';
     summaryElement.innerHTML = summaryHTML;
+
+    // Googleスプレッドシートに送信ボタンを表示
+    document.getElementById('send-to-google').style.display = 'block';
 }
 
 function downloadResults() {
@@ -239,6 +246,10 @@ function downloadResults() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function sendResultsToGoogle() {
+    correctAnswers.forEach(record => submitResult(record));
 }
 
 function simulateTap(elementId) {
