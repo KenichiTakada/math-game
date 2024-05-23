@@ -104,7 +104,7 @@ h1 {
 }
 
 .choice.selected {
-    background-color: #ff6347;
+    background-color: #87ceeb;
 }
 
 .correct-answer {
@@ -138,7 +138,7 @@ h1 {
 button {
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #1e90ff;
+    background-color: #87ceeb;
     color: white;
     border: none;
     border-radius: 5px;
@@ -151,7 +151,7 @@ button:hover {
 }
 
 button:active {
-    background-color: #1e90ff;
+    background-color: #87ceeb;
     transform: scale(1);
 }
 
@@ -183,11 +183,11 @@ button:active {
 @keyframes hoverAnimation {
     0% {
         transform: scale(1);
-        background-color: #1e90ff;
+        background-color: #87ceeb;
     }
     20% {
         transform: scale(1.05);
-        background-color: #1e90ff;
+        background-color: #87ceeb;
     }
     50% {
         transform: scale(0.95);
@@ -195,7 +195,7 @@ button:active {
     }
     100% {
         transform: scale(1);
-        background-color: #1e90ff;
+        background-color: #87ceeb;
     }
 }
 
