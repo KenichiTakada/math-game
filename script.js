@@ -1,8 +1,9 @@
 let num1, num2, correctAnswer, questionCount = 0;
-const totalQuestions = 3;
+const totalQuestions = 30;
 let correctAnswers = [];
 let currentMode = 'multiplication';
 let startTime;
+const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1qK0yubjDx4b6_M3kk1C-5DtYrMrS493MoB9ocOTmwSk/edit#gid=0'; // ここにスプレッドシートのURLを入力
 
 const sounds = {
     start: new Audio('start.mp3'),
@@ -15,15 +16,10 @@ const correctImages = [
     {src: 'images/correct2.png', weight: 1},
     {src: 'images/correct3.png', weight: 1},
     {src: 'images/correct4.png', weight: 1},
-    {src: 'images/correct5.png', weight: 1}
-];
-
-const wrongImages = [
-    {src: 'images/wrong1.png', weight: 1},
-    {src: 'images/wrong2.png', weight: 1},
-    {src: 'images/wrong3.png', weight: 1},
-    {src: 'images/wrong4.png', weight: 1},
-    {src: 'images/wrong5.png', weight: 1}
+    {src: 'images/correct5.png', weight: 1},
+    {src: 'images/correct6.png', weight: 1},
+    {src: 'images/correct7.png', weight: 1},
+    {src: 'images/correct8.png', weight: 1}
 ];
 
 function getRandomInt(min, max) {
@@ -132,6 +128,7 @@ function submitResult(resultRecord) {
       console.error('Error:', data.message);
     } else {
       console.log('Success:', data);
+      document.getElementById('open-google-sheet').style.display = 'block'; // 成功時にスプレッドシートを開くボタンを表示
     }
   })
   .catch(error => console.error('Error:', error));
@@ -162,29 +159,29 @@ function checkAnswer(selectedChoice) {
 
     correctAnswers.push(resultRecord);
 
-    const imgSrc = userAnswer === correctAnswer ? getRandomImage(correctImages) : getRandomImage(wrongImages);
-    const imgElement = document.createElement('img');
-    imgElement.src = imgSrc;
-    imgElement.className = 'pop-out';
-
     if (userAnswer === correctAnswer) {
+        const imgSrc = getRandomImage(correctImages);
+        const imgElement = document.createElement('img');
+        imgElement.src = imgSrc;
+        imgElement.className = 'pop-out';
+        document.body.appendChild(imgElement);
         resultElement.innerText = '正解！';
         resultElement.className = 'correct-answer';
         sounds.correct.play();
+        setTimeout(() => {
+            resultElement.innerText = '';
+            document.body.removeChild(imgElement);
+            generateQuestion();
+        }, 2000);
     } else {
         resultElement.innerText = '残念...！';
         resultElement.className = 'incorrect-answer';
         sounds.wrong.play();
+        setTimeout(() => {
+            resultElement.innerText = '';
+            generateQuestion();
+        }, 2000);
     }
-
-    document.body.appendChild(imgElement);
-
-    setTimeout(() => {
-        resultElement.innerText = '';
-        document.body.removeChild(imgElement);
-        simulateTap('question'); // 空白部分をタップする動作をシミュレート
-        generateQuestion();
-    }, 2000);
 }
 
 function getSymbol(mode) {
@@ -252,13 +249,8 @@ function sendResultsToGoogle() {
     correctAnswers.forEach(record => submitResult(record));
 }
 
-function simulateTap(elementId) {
-    const event = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: true
-    });
-    document.getElementById(elementId).dispatchEvent(event);
+function openGoogleSheet() {
+    window.open(googleSheetUrl, '_blank');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
