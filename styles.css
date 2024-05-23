@@ -32,8 +32,8 @@ html {
 }
 
 .accordion {
-    background-color: #ffcccb;
-    color: #444;
+    background-color: #f78fb3;
+    color: #fff;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -44,13 +44,15 @@ html {
     border-top: 2px solid #f08080;
 }
 
+/* コメントアウト開始
 .active, .accordion:hover {
     background-color: #ffaaaa; 
 }
+コメントアウト終了 */
 
 .panel {
     padding: 0 18px;
-    background-color: white;
+    background-color: #fff;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -71,15 +73,17 @@ html {
     margin-top: 5px;
     border: none;
     border-radius: 5px;
+    background-color: #fce38a;
 }
 
 h1 {
-    color: #ff6347;
+    color: #ff6f61;
 }
 
 #question {
     font-size: 2em;
     margin: 20px 0;
+    color: #ff6f61;
 }
 
 #choices {
@@ -91,25 +95,27 @@ h1 {
 .choice {
     padding: 30px;
     font-size: 1.5em;
-    background-color: #87ceeb;
+    background-color: #34ace0;
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.6s, background-color 0.3s;
+    transition: transform 0.6s;
 }
 
 .choice:hover {
     animation: hoverAnimation 0.6s forwards;
 }
 
+/* コメントアウト開始
 .choice.selected {
-    background-color: #87ceeb;
+    background-color: #6495ed;
 }
+コメントアウト終了 */
 
 .correct-answer {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #c7ecee;
+    color: #218c74;
     padding: 10px;
     border-radius: 10px;
     margin-top: 20px;
@@ -117,8 +123,8 @@ h1 {
 }
 
 .incorrect-answer {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #ffcccc;
+    color: #b33939;
     padding: 10px;
     border-radius: 10px;
     margin-top: 20px;
@@ -129,21 +135,23 @@ h1 {
     margin-top: 20px;
     font-size: 24px;
     font-weight: bold;
+    color: #ff6f61;
 }
 
 #summary {
     margin-top: 20px;
+    color: #2c3e50;
 }
 
 button {
     padding: 10px 20px;
     font-size: 18px;
-    background-color: #87ceeb;
+    background-color: #ff6f61;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.6s, background-color 0.3s;
+    transition: transform 0.6s;
 }
 
 button:hover {
@@ -151,8 +159,27 @@ button:hover {
 }
 
 button:active {
-    background-color: #87ceeb;
+    background-color: #ff6f61;
     transform: scale(1);
+}
+
+@keyframes hoverAnimation {
+    0% {
+        transform: scale(1);
+        /* background-color: #ff6347; コメントアウト */
+    }
+    50% {
+        transform: scale(1.05);
+        /* background-color: #1e90ff; コメントアウト */
+    }
+    75% {
+        transform: scale(0.95);
+        /* background-color: #1e90ff; コメントアウト */
+    }
+    100% {
+        transform: scale(1);
+        /* background-color: #ff6347; コメントアウト */
+    }
 }
 
 .pop-out {
@@ -177,25 +204,6 @@ button:active {
     100% {
         transform: translate(-50%, -50%) scale(1);
         opacity: 1;
-    }
-}
-
-@keyframes hoverAnimation {
-    0% {
-        transform: scale(1);
-        background-color: #87ceeb;
-    }
-    20% {
-        transform: scale(1.05);
-        background-color: #87ceeb;
-    }
-    50% {
-        transform: scale(0.95);
-        background-color: #ff6347;
-    }
-    100% {
-        transform: scale(1);
-        background-color: #87ceeb;
     }
 }
 
