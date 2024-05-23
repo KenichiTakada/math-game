@@ -119,14 +119,16 @@ function generateChoices() {
 
 function submitResult(resultRecord) {
   const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのURLを入力
-  const options = {
+  fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    payload: JSON.stringify(resultRecord)
-  };
-  UrlFetchApp.fetch(url, options);
+    body: JSON.stringify(resultRecord)
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
 }
 
 function checkAnswer(selectedChoice) {
@@ -196,7 +198,7 @@ function showResults() {
     const resultElement = document.getElementById('result');
     const summaryElement = document.getElementById('summary');
     resultElement.innerText = 'ゲーム終了！結果：';
-    let correctCount = correctAnswers.filter(answer => answer.correct === '正解').length;
+    let correctCount = correctAnswers.filter(answer => answer.result === '正解').length;
     let incorrectCount = correctAnswers.length - correctCount;
     resultElement.innerHTML += `<br>正解：${correctCount} 問<br>不正解：${incorrectCount} 問`;
 
