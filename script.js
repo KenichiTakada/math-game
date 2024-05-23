@@ -1,5 +1,5 @@
 let num1, num2, correctAnswer, questionCount = 0;
-const totalQuestions = 30;
+const totalQuestions = 3;
 let correctAnswers = [];
 let currentMode = 'multiplication';
 let startTime;
