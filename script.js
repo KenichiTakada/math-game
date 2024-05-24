@@ -122,7 +122,12 @@ function submitResult(resultRecord) {
     },
     body: JSON.stringify(resultRecord)
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.status === 'error') {
       console.error('Error:', data.message);
