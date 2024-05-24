@@ -114,7 +114,7 @@ function generateChoices() {
 }
 
 function submitResult(resultRecord) {
-  const url = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
+  const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
   fetch(url, {
     method: 'POST',
     headers: {
