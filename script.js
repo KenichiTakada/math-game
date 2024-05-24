@@ -1,9 +1,9 @@
 let num1, num2, correctAnswer, questionCount = 0;
-const totalQuestions = 3;
+const totalQuestions = 30;
 let correctAnswers = [];
 let currentMode = 'multiplication';
 let startTime;
-const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1qK0yubjDx4b6_M3kk1C-5DtYrMrS493MoB9ocOTmwSk/edit#gid=0'; // ここにスプレッドシートのURLを入力
+// const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit'; // ここにスプレッドシートのURLを入力
 
 const sounds = {
     start: new Audio('start.mp3'),
@@ -113,35 +113,35 @@ function generateChoices() {
     }
 }
 
-function submitResult(resultRecord) {
-  const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(resultRecord)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.status === 'error') {
-      console.error('Error:', data.message);
-      alert(`Error: ${data.message}`); // ユーザーにエラーメッセージを表示
-    } else {
-      console.log('Success:', data);
-      document.getElementById('open-google-sheet').style.display = 'block'; // 成功時にスプレッドシートを開くボタンを表示
-    }
-  })
-  .catch(error => {
-    console.error('Fetch Error:', error.message);
-    alert(`Fetch Error: ${error.message}`); // ユーザーにフェッチエラーメッセージを表示
-  });
-}
+// function submitResult(resultRecord) {
+//   const url = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
+//   fetch(url, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(resultRecord)
+//   })
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     return response.json();
+//   })
+//   .then(data => {
+//     if (data.status === 'error') {
+//       console.error('Error:', data.message);
+//       alert(`Error: ${data.message}`); // ユーザーにエラーメッセージを表示
+//     } else {
+//       console.log('Success:', data);
+//       document.getElementById('open-google-sheet').style.display = 'block'; // 成功時にスプレッドシートを開くボタンを表示
+//     }
+//   })
+//   .catch(error => {
+//     console.error('Fetch Error:', error.message);
+//     alert(`Fetch Error: ${error.message}`); // ユーザーにフェッチエラーメッセージを表示
+//   });
+// }
 
 function checkAnswer(selectedChoice) {
     const buttons = document.getElementsByClassName('choice');
@@ -227,9 +227,17 @@ function showResults() {
     summaryHTML += '</table>';
     summaryElement.innerHTML = summaryHTML;
 
-    // Googleスプレッドシートに送信ボタンを表示
-    document.getElementById('send-to-google').style.display = 'block';
+    // Googleスプレッドシートに送信ボタンはコメントアウト
+    // document.getElementById('send-to-google').style.display = 'block';
 }
+
+// function sendResultsToGoogle() {
+//     correctAnswers.forEach(record => submitResult(record));
+// }
+
+// function openGoogleSheet() {
+//     window.open(googleSheetUrl, '_blank');
+// }
 
 function downloadResults() {
     const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果", "モード"];
@@ -252,14 +260,6 @@ function downloadResults() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
-
-function sendResultsToGoogle() {
-    correctAnswers.forEach(record => submitResult(record));
-}
-
-function openGoogleSheet() {
-    window.open(googleSheetUrl, '_blank');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
