@@ -114,7 +114,7 @@ function generateChoices() {
 }
 
 function submitResult(resultRecord) {
-  const url = 'https://script.google.com/macros/s/AKfycbx-jbOQKeoUnMmO-J4RrlSS6el3tHzZb9nPlVcjYB8mtzDJr32oyYSH1DVmNrdmgnLT_Q/exec'; // ここにGoogle Apps ScriptのURLを入力
+  const url = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
   fetch(url, {
     method: 'POST',
     headers: {
@@ -126,12 +126,16 @@ function submitResult(resultRecord) {
   .then(data => {
     if (data.status === 'error') {
       console.error('Error:', data.message);
+      alert(`Error: ${data.message}`); // ユーザーにエラーメッセージを表示
     } else {
       console.log('Success:', data);
       document.getElementById('open-google-sheet').style.display = 'block'; // 成功時にスプレッドシートを開くボタンを表示
     }
   })
-  .catch(error => console.error('Error:', error));
+  .catch(error => {
+    console.error('Fetch Error:', error.message);
+    alert(`Fetch Error: ${error.message}`); // ユーザーにフェッチエラーメッセージを表示
+  });
 }
 
 function checkAnswer(selectedChoice) {
