@@ -17,12 +17,12 @@ const correctImages = [
     {src: 'images/correct3.png', weight: 1},
     {src: 'images/correct4.png', weight: 1},
     {src: 'images/correct5.png', weight: 1},
-    {src: 'images/correct6.png', weight: 1},
-    {src: 'images/correct7.png', weight: 1},
-    {src: 'images/correct8.png', weight: 1},
-    {src: 'images/correct9.png', weight: 1},
-    {src: 'images/correct10.png', weight: 1},
-    {src: 'images/correct11.png', weight: 1}
+    {src: 'images/correct6.png', weight: 3},
+    {src: 'images/correct7.png', weight: 3},
+    {src: 'images/correct8.png', weight: 3},
+    {src: 'images/correct9.png', weight: 5},
+    {src: 'images/correct10.png', weight: 5},
+    {src: 'images/correct11.png', weight: 5}
 ];
 
 function getRandomInt(min, max) {
