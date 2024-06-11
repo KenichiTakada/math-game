@@ -5,7 +5,6 @@ let currentMode = 'multiplication';
 let startTime;
 let currentRecognition;
 let pendingAnswer;
-// const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit'; // ここにスプレッドシートのURLを入力
 
 const sounds = {
     start: new Audio('start.mp3'),
@@ -176,18 +175,7 @@ function showResults() {
     });
     summaryHTML += '</table>';
     summaryElement.innerHTML = summaryHTML;
-
-    // Googleスプレッドシートに送信ボタンはコメントアウト
-    // document.getElementById('send-to-google').style.display = 'block';
 }
-
-// function sendResultsToGoogle() {
-//     correctAnswers.forEach(record => submitResult(record));
-// }
-
-// function openGoogleSheet() {
-//     window.open(googleSheetUrl, '_blank');
-// }
 
 function downloadResults() {
     const headers = ["日時", "問題", "正解", "あなたの答え", "所要時間 (秒)", "結果", "モード"];
@@ -271,7 +259,7 @@ function processVoiceInput(transcript) {
             checkAnswer(userAnswer);
         } else {
             const recognizedAnswerElement = document.getElementById('recognized-answer');
-            recognizedAnswerElement.innerText = `認識された回答: ${transcript}`;
+            recognizedAnswerElement.innerText = `認識された回答: ${userAnswer}`;
             const confirmationElement = document.getElementById('confirmation');
             confirmationElement.style.display = 'block';
             pendingAnswer = userAnswer;
