@@ -63,6 +63,11 @@ function getModeName(mode) {
     }
 }
 
+function startGame() {
+    document.getElementById('start-voice').style.display = 'none';
+    generateQuestion();
+}
+
 function generateQuestion() {
     if (questionCount < totalQuestions) {
         sounds.start.play();
@@ -242,7 +247,6 @@ function startVoiceRecognition() {
 
     recognition.onstart = function() {
         document.getElementById('voice-status').innerText = '音声認識中...';
-        document.getElementById('start-voice').style.display = 'none';
     };
 
     recognition.onresult = function(event) {
@@ -268,7 +272,6 @@ function processVoiceInput(transcript) {
     pendingAnswer = transcript;
     const confirmationElement = document.getElementById('confirmation');
     confirmationElement.style.display = 'block';
-    currentRecognition.stop();
 }
 
 function confirmAnswer(isConfirmed) {
