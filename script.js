@@ -256,6 +256,8 @@ function startVoiceRecognition() {
 }
 
 function processVoiceInput(transcript) {
+    const recognizedAnswerElement = document.getElementById('recognized-answer');
+    recognizedAnswerElement.innerText = `認識された回答: ${transcript}`;
     const userAnswer = parseInt(transcript);
     if (!isNaN(userAnswer)) {
         checkAnswer(userAnswer);
