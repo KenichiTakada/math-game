@@ -47,7 +47,6 @@ function getRandomImage(images) {
 function updateMode() {
     currentMode = document.getElementById('mode').value;
     document.getElementById('current-mode').innerText = `現在の計算モード: ${getModeName(currentMode)}`;
-    generateQuestion();
 }
 
 function getModeName(mode) {
@@ -65,6 +64,7 @@ function getModeName(mode) {
 
 function startGame() {
     document.getElementById('start-voice').style.display = 'none';
+    updateMode();
     generateQuestion();
 }
 
@@ -275,7 +275,6 @@ function processVoiceInput(transcript) {
 }
 
 function confirmAnswer(isConfirmed) {
-    const recognizedAnswerElement = document.getElementById('recognized-answer');
     const confirmationElement = document.getElementById('confirmation');
     confirmationElement.style.display = 'none';
 
