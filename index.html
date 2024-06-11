@@ -12,12 +12,7 @@
             <h1>計算練習ゲーム</h1>
             <div id="current-mode">現在の計算モード: 掛け算</div>
             <div id="question">問題がここに表示されます</div>
-            <div id="choices">
-                <button class="choice" onclick="checkAnswer(0)">選択肢 1</button>
-                <button class="choice" onclick="checkAnswer(1)">選択肢 2</button>
-                <button class="choice" onclick="checkAnswer(2)">選択肢 3</button>
-                <button class="choice" onclick="checkAnswer(3)">選択肢 4</button>
-            </div>
+            <button id="start-voice" onclick="startVoiceRecognition()">音声で回答</button>
             <div id="result"></div>
             <div id="summary"></div>
             <button onclick="downloadResults()">結果をダウンロード</button>
