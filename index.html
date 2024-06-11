@@ -15,6 +15,9 @@
             <button id="start-voice" onclick="startVoiceRecognition()">回答スタート！</button>
             <div id="voice-status"></div> <!-- 音声認識のステータス表示用 -->
             <div id="recognized-answer"></div> <!-- 音声認識された回答の表示用 -->
+            <div id="confirmation" style="display: none;">
+                この回答でいいですか？ <button onclick="confirmAnswer(true)">はい！</button> <button onclick="confirmAnswer(false)">いいえ！</button>
+            </div>
             <div id="result"></div>
             <div id="summary"></div>
             <button onclick="downloadResults()">結果をダウンロード</button>
