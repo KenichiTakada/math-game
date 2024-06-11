@@ -234,6 +234,10 @@ function startVoiceRecognition() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    recognition.onstart = function() {
+        document.getElementById('voice-status').innerText = '音声認識中...';
+    };
+
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         processVoiceInput(transcript);
@@ -241,6 +245,11 @@ function startVoiceRecognition() {
 
     recognition.onerror = function(event) {
         alert('音声認識中にエラーが発生しました: ' + event.error);
+        document.getElementById('voice-status').innerText = '';
+    };
+
+    recognition.onend = function() {
+        document.getElementById('voice-status').innerText = '';
     };
 
     recognition.start();
