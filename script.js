@@ -135,13 +135,11 @@ function checkAnswer(userAnswer) {
             generateQuestion();
         }, 2000);
     } else {
-        resultElement.innerText = '残念...！';
-        resultElement.className = 'incorrect-answer';
-        sounds.wrong.play();
-        setTimeout(() => {
-            resultElement.innerText = '';
-            generateQuestion();
-        }, 2000);
+        const recognizedAnswerElement = document.getElementById('recognized-answer');
+        recognizedAnswerElement.innerText = `認識された回答: ${userAnswer}`;
+        const confirmationElement = document.getElementById('confirmation');
+        confirmationElement.style.display = 'block';
+        pendingAnswer = userAnswer;
     }
 }
 
@@ -267,11 +265,20 @@ function startVoiceRecognition() {
 }
 
 function processVoiceInput(transcript) {
-    const recognizedAnswerElement = document.getElementById('recognized-answer');
-    recognizedAnswerElement.innerText = `認識された回答: ${transcript}`;
-    pendingAnswer = transcript;
-    const confirmationElement = document.getElementById('confirmation');
-    confirmationElement.style.display = 'block';
+    const userAnswer = parseInt(transcript);
+    if (!isNaN(userAnswer)) {
+        if (userAnswer === correctAnswer) {
+            checkAnswer(userAnswer);
+        } else {
+            const recognizedAnswerElement = document.getElementById('recognized-answer');
+            recognizedAnswerElement.innerText = `認識された回答: ${transcript}`;
+            const confirmationElement = document.getElementById('confirmation');
+            confirmationElement.style.display = 'block';
+            pendingAnswer = userAnswer;
+        }
+    } else {
+        alert('認識された回答が数字ではありません: ' + transcript);
+    }
 }
 
 function confirmAnswer(isConfirmed) {
@@ -279,12 +286,7 @@ function confirmAnswer(isConfirmed) {
     confirmationElement.style.display = 'none';
 
     if (isConfirmed) {
-        const userAnswer = parseInt(pendingAnswer);
-        if (!isNaN(userAnswer)) {
-            checkAnswer(userAnswer);
-        } else {
-            alert('認識された回答が数字ではありません。');
-        }
+        checkAnswer(pendingAnswer);
     } else {
         startVoiceRecognition();
     }
