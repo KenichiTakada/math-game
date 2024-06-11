@@ -3,6 +3,8 @@ const totalQuestions = 30;
 let correctAnswers = [];
 let currentMode = 'multiplication';
 let startTime;
+let recognition;  // 音声認識オブジェクトを保持
+let recognizing = false;  // 音声認識の状態を保持
 // const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit'; // ここにスプレッドシートのURLを入力
 
 const sounds = {
@@ -89,6 +91,9 @@ function generateQuestion() {
         }
 
         startTime = new Date();
+        if (recognizing) {
+            recognition.start();  // 次の問題が生成された後に音声認識を再開
+        }
     } else {
         showResults();
     }
@@ -229,12 +234,13 @@ function startVoiceRecognition() {
         return;
     }
 
-    const recognition = new webkitSpeechRecognition();
+    recognition = new webkitSpeechRecognition();
     recognition.lang = 'ja-JP';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = function() {
+        recognizing = true;
         document.getElementById('voice-status').innerText = '音声認識中...';
     };
 
@@ -246,10 +252,16 @@ function startVoiceRecognition() {
     recognition.onerror = function(event) {
         alert('音声認識中にエラーが発生しました: ' + event.error);
         document.getElementById('voice-status').innerText = '';
+        recognizing = false;
     };
 
     recognition.onend = function() {
         document.getElementById('voice-status').innerText = '';
+        if (questionCount < totalQuestions) {
+            recognition.start();  // 次の問題が生成された後に音声認識を再開
+        } else {
+            recognizing = false;
+        }
     };
 
     recognition.start();
