@@ -3,8 +3,7 @@ const totalQuestions = 30;
 let correctAnswers = [];
 let currentMode = 'multiplication';
 let startTime;
-let recognition;  // 音声認識オブジェクトを保持
-let recognizing = false;  // 音声認識の状態を保持
+let currentRecognition;
 // const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit'; // ここにスプレッドシートのURLを入力
 
 const sounds = {
@@ -91,9 +90,7 @@ function generateQuestion() {
         }
 
         startTime = new Date();
-        if (recognizing) {
-            recognition.start();  // 次の問題が生成された後に音声認識を再開
-        }
+        startVoiceRecognition();
     } else {
         showResults();
     }
@@ -224,23 +221,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    generateQuestion();
 });
 
-// 音声認識の設定
 function startVoiceRecognition() {
     if (!('webkitSpeechRecognition' in window)) {
         alert('このブラウザは音声認識をサポートしていません。');
         return;
     }
 
-    recognition = new webkitSpeechRecognition();
+    if (currentRecognition) {
+        currentRecognition.stop();
+    }
+
+    const recognition = new webkitSpeechRecognition();
     recognition.lang = 'ja-JP';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
+    currentRecognition = recognition;
 
     recognition.onstart = function() {
-        recognizing = true;
         document.getElementById('voice-status').innerText = '音声認識中...';
     };
 
@@ -252,16 +251,10 @@ function startVoiceRecognition() {
     recognition.onerror = function(event) {
         alert('音声認識中にエラーが発生しました: ' + event.error);
         document.getElementById('voice-status').innerText = '';
-        recognizing = false;
     };
 
     recognition.onend = function() {
         document.getElementById('voice-status').innerText = '';
-        if (questionCount < totalQuestions) {
-            recognition.start();  // 次の問題が生成された後に音声認識を再開
-        } else {
-            recognizing = false;
-        }
     };
 
     recognition.start();
@@ -270,10 +263,24 @@ function startVoiceRecognition() {
 function processVoiceInput(transcript) {
     const recognizedAnswerElement = document.getElementById('recognized-answer');
     recognizedAnswerElement.innerText = `認識された回答: ${transcript}`;
-    const userAnswer = parseInt(transcript);
-    if (!isNaN(userAnswer)) {
-        checkAnswer(userAnswer);
+    const confirmationElement = document.getElementById('confirmation');
+    confirmationElement.style.display = 'block';
+    currentRecognition.stop();
+}
+
+function confirmAnswer(isConfirmed) {
+    const recognizedAnswerElement = document.getElementById('recognized-answer');
+    const confirmationElement = document.getElementById('confirmation');
+    confirmationElement.style.display = 'none';
+
+    if (isConfirmed) {
+        const userAnswer = parseInt(recognizedAnswerElement.innerText.replace('認識された回答: ', ''));
+        if (!isNaN(userAnswer)) {
+            checkAnswer(userAnswer);
+        } else {
+            alert('認識された回答が数字ではありません。');
+        }
     } else {
-        alert('認識された回答が数字ではありません: ' + transcript);
+        startVoiceRecognition();
     }
 }
