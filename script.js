@@ -17,12 +17,12 @@ const correctImages = [
     {src: 'images/correct3.png', weight: 1},
     {src: 'images/correct4.png', weight: 1},
     {src: 'images/correct5.png', weight: 1},
-    {src: 'images/correct6.png', weight: 3},
-    {src: 'images/correct7.png', weight: 3},
-    {src: 'images/correct8.png', weight: 3},
-    {src: 'images/correct9.png', weight: 5},
-    {src: 'images/correct10.png', weight: 5},
-    {src: 'images/correct11.png', weight: 5}
+    {src: 'images/correct6.png', weight: 1},
+    {src: 'images/correct7.png', weight: 1},
+    {src: 'images/correct8.png', weight: 1},
+    {src: 'images/correct9.png', weight: 1},
+    {src: 'images/correct10.png', weight: 1},
+    {src: 'images/correct11.png', weight: 1}
 ];
 
 function getRandomInt(min, max) {
@@ -88,72 +88,13 @@ function generateQuestion() {
                 break;
         }
 
-        generateChoices();
         startTime = new Date();
     } else {
         showResults();
     }
 }
 
-function generateChoices() {
-    let choices = [];
-    const correctPosition = Math.floor(Math.random() * 4);
-    for (let i = 0; i < 4; i++) {
-        if (i === correctPosition) {
-            choices.push(correctAnswer);
-        } else {
-            let wrongAnswer;
-            do {
-                wrongAnswer = getRandomInt(1, 100);
-            } while (wrongAnswer === correctAnswer || choices.includes(wrongAnswer));
-            choices.push(wrongAnswer);
-        }
-    }
-    const buttons = document.getElementsByClassName('choice');
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].innerText = choices[i];
-        buttons[i].classList.remove('selected'); // 選択状態を解除
-    }
-}
-
-// function submitResult(resultRecord) {
-//   const url = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec'; // ここにGoogle Apps ScriptのデプロイURLを入力
-//   fetch(url, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(resultRecord)
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-//     return response.json();
-//   })
-//   .then(data => {
-//     if (data.status === 'error') {
-//       console.error('Error:', data.message);
-//       alert(`Error: ${data.message}`); // ユーザーにエラーメッセージを表示
-//     } else {
-//       console.log('Success:', data);
-//       document.getElementById('open-google-sheet').style.display = 'block'; // 成功時にスプレッドシートを開くボタンを表示
-//     }
-//   })
-//   .catch(error => {
-//     console.error('Fetch Error:', error.message);
-//     alert(`Fetch Error: ${error.message}`); // ユーザーにフェッチエラーメッセージを表示
-//   });
-// }
-
-function checkAnswer(selectedChoice) {
-    const buttons = document.getElementsByClassName('choice');
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove('selected'); // 他のボタンの選択状態を解除
-    }
-    buttons[selectedChoice].classList.add('selected'); // 選択状態を追加
-
-    const userAnswer = parseInt(buttons[selectedChoice].innerText);
+function checkAnswer(userAnswer) {
     const resultElement = document.getElementById('result');
     const endTime = new Date();
     const timeTaken = (endTime - startTime) / 1000;
@@ -280,3 +221,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     generateQuestion();
 });
+
+// 音声認識の設定
+function startVoiceRecognition() {
+    if (!('webkitSpeechRecognition' in window)) {
+        alert('このブラウザは音声認識をサポートしていません。');
+        return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'ja-JP';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        processVoiceInput(transcript);
+    };
+
+    recognition.onerror = function(event) {
+        alert('音声認識中にエラーが発生しました: ' + event.error);
+    };
+
+    recognition.start();
+}
+
+function processVoiceInput(transcript) {
+    const userAnswer = parseInt(transcript);
+    if (!isNaN(userAnswer)) {
+        checkAnswer(userAnswer);
+    } else {
+        alert('認識された回答が数字ではありません: ' + transcript);
+    }
+}
