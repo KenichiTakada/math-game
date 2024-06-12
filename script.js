@@ -227,7 +227,7 @@ function startVoiceRecognition() {
 
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'ja-JP';
-    recognition.interimResults = false;
+    recognition.interimResults = true;  // interimResultsをtrueに設定
     recognition.maxAlternatives = 1;
     currentRecognition = recognition;
 
@@ -236,8 +236,12 @@ function startVoiceRecognition() {
     };
 
     recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        processVoiceInput(transcript);
+        const interim_transcript = event.results[0][0].transcript;
+        if (event.results[0].isFinal) {
+            processVoiceInput(interim_transcript);
+        } else {
+            document.getElementById('voice-status').innerText = `音声認識中...: ${interim_transcript}`;
+        }
     };
 
     recognition.onerror = function(event) {
@@ -247,6 +251,9 @@ function startVoiceRecognition() {
 
     recognition.onend = function() {
         document.getElementById('voice-status').innerText = '';
+        if (!pendingAnswer) {
+            startVoiceRecognition();
+        }
     };
 
     recognition.start();
@@ -275,6 +282,7 @@ function confirmAnswer(isConfirmed) {
 
     if (isConfirmed) {
         checkAnswer(pendingAnswer);
+        pendingAnswer = null;
     } else {
         startVoiceRecognition();
     }
