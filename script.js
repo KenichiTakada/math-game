@@ -245,8 +245,14 @@ function startVoiceRecognition() {
     };
 
     recognition.onerror = function(event) {
-        alert('音声認識中にエラーが発生しました: ' + event.error);
-        document.getElementById('voice-status').innerText = '';
+        if (event.error === 'aborted') {
+            // 'aborted'エラーが発生した場合、再試行する
+            console.warn('音声認識が中断されました。再試行します。');
+            startVoiceRecognition();
+        } else {
+            alert('音声認識中にエラーが発生しました: ' + event.error);
+            document.getElementById('voice-status').innerText = '';
+        }
     };
 
     recognition.onend = function() {
