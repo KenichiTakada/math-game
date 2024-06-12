@@ -222,12 +222,12 @@ function startVoiceRecognition() {
     }
 
     if (currentRecognition) {
-        currentRecognition.stop();
+        currentRecognition.abort(); // stopの代わりにabortを使用
     }
 
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'ja-JP';
-    recognition.interimResults = true;  // interimResultsをtrueに設定
+    recognition.interimResults = true; // interimResultsをtrueに設定
     recognition.maxAlternatives = 1;
     currentRecognition = recognition;
 
@@ -246,7 +246,6 @@ function startVoiceRecognition() {
 
     recognition.onerror = function(event) {
         if (event.error === 'aborted') {
-            // 'aborted'エラーが発生した場合、再試行する
             console.warn('音声認識が中断されました。再試行します。');
             startVoiceRecognition();
         } else {
