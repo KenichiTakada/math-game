@@ -5,8 +5,8 @@ let currentMode = 'multiplication';
 let startTime;
 let currentRecognition;
 let pendingAnswer;
-let firstNumbers = [...Array(10).keys()].map(i => i + 1);
-let secondNumbers = [...Array(10).keys()].map(i => i + 1);
+let firstNumbers = [...Array(10).keys()];
+let secondNumbers = [...Array(10).keys()];
 
 const sounds = {
     start: new Audio('start.mp3'),
