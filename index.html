@@ -20,6 +20,8 @@
             </div>
             <div id="result"></div>
             <div id="summary"></div>
+            <input type="text" id="answer-input" placeholder="答えを入力">
+            <button id="submit-answer" onclick="submitAnswer()">回答！</button>
             <button onclick="downloadResults()">結果をダウンロード</button>
         </div>
         <button class="accordion">設定</button>
@@ -33,16 +35,16 @@
                     <option value="subtraction">引き算</option>
                 </select>
                 <div>
-                    <label for="min1">1つ目の数字 最小値:</label>
-                    <input type="number" id="min1" value="2" min="1">
-                    <label for="max1">最大値:</label>
-                    <input type="number" id="max1" value="9" min="1">
+                    <label>1つ目の数字:</label>
+                    <div id="first-numbers">
+                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i+1}" checked>${i+1}</label>`).join('')}
+                    </div>
                 </div>
                 <div>
-                    <label for="min2">2つ目の数字 最小値:</label>
-                    <input type="number" id="min2" value="2" min="1">
-                    <label for="max2">最大値:</label>
-                    <input type="number" id="max2" value="9" min="1">
+                    <label>2つ目の数字:</label>
+                    <div id="second-numbers">
+                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i+1}" checked>${i+1}</label>`).join('')}
+                    </div>
                 </div>
             </div>
         </div>
