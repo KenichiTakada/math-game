@@ -5,6 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>計算練習ゲーム</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .game-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px;
+        }
+        .menu {
+            margin: 20px;
+        }
+        .menu label {
+            display: block;
+            margin: 5px;
+        }
+        .panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -37,13 +71,13 @@
                 <div>
                     <label>1つ目の数字:</label>
                     <div id="first-numbers">
-                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i+1}" checked>${i+1}</label>`).join('')}
+                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i}" checked>${i}</label>`).join('')}
                     </div>
                 </div>
                 <div>
                     <label>2つ目の数字:</label>
                     <div id="second-numbers">
-                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i+1}" checked>${i+1}</label>`).join('')}
+                        ${[...Array(10).keys()].map(i => `<label><input type="checkbox" value="${i}" checked>${i}</label>`).join('')}
                     </div>
                 </div>
             </div>
