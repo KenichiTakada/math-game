@@ -7,6 +7,7 @@ let currentRecognition;
 let pendingAnswer;
 let firstNumbers = [...Array(10).keys()];
 let secondNumbers = [...Array(10).keys()];
+let selectedAnswerMethod = 'voice';
 
 const sounds = {
     start: new Audio('start.mp3'),
@@ -64,7 +65,18 @@ function getModeName(mode) {
 }
 
 function startGame() {
-    document.getElementById('start-voice').style.display = 'none';
+    selectedAnswerMethod = document.querySelector('input[name="answer-method"]:checked').value;
+
+    document.getElementById('start-game').style.display = 'none';
+    if (selectedAnswerMethod === 'voice') {
+        document.getElementById('answer-input').style.display = 'none';
+        document.getElementById('submit-answer').style.display = 'none';
+        startVoiceRecognition();
+    } else {
+        document.getElementById('answer-input').style.display = 'inline-block';
+        document.getElementById('submit-answer').style.display = 'inline-block';
+    }
+
     firstNumbers = Array.from(document.querySelectorAll('#first-numbers input:checked')).map(el => parseInt(el.value));
     secondNumbers = Array.from(document.querySelectorAll('#second-numbers input:checked')).map(el => parseInt(el.value));
     updateMode();
@@ -94,7 +106,9 @@ function generateQuestion() {
         }
 
         startTime = new Date();
-        startVoiceRecognition();
+        if (selectedAnswerMethod === 'voice') {
+            startVoiceRecognition();
+        }
     } else {
         showResults();
     }
