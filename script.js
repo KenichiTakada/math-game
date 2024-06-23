@@ -20,7 +20,7 @@ const correctImages = [
     {src: 'images/correct3.png', weight: 1},
     {src: 'images/correct4.png', weight: 1},
     {src: 'images/correct5.png', weight: 1},
-    {src: 'images/correct6.png', weight: 1},
+    {src: 'images.correct6.png', weight: 1},
     {src: 'images/correct7.png', weight: 1},
     {src: 'images/correct8.png', weight: 1},
     {src: 'images/correct9.png', weight: 1},
@@ -223,6 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 panel.style.maxHeight = panel.scrollHeight + "px";
             }
         });
+    }
+
+    const firstNumbersContainer = document.getElementById('first-numbers');
+    const secondNumbersContainer = document.getElementById('second-numbers');
+    for (let i = 0; i < 10; i++) {
+        firstNumbersContainer.innerHTML += `<label><input type="checkbox" value="${i}" checked>${i}</label>`;
+        secondNumbersContainer.innerHTML += `<label><input type="checkbox" value="${i}" checked>${i}</label>`;
     }
 });
 
