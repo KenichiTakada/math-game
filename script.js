@@ -5,6 +5,8 @@ let currentMode = 'multiplication';
 let startTime;
 let currentRecognition;
 let pendingAnswer;
+let firstNumbers = [...Array(10).keys()].map(i => i + 1);
+let secondNumbers = [...Array(10).keys()].map(i => i + 1);
 
 const sounds = {
     start: new Audio('start.mp3'),
@@ -26,8 +28,8 @@ const correctImages = [
     {src: 'images/correct11.png', weight: 1}
 ];
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomInt(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function getRandomImage(images) {
@@ -63,6 +65,8 @@ function getModeName(mode) {
 
 function startGame() {
     document.getElementById('start-voice').style.display = 'none';
+    firstNumbers = Array.from(document.querySelectorAll('#first-numbers input:checked')).map(el => parseInt(el.value));
+    secondNumbers = Array.from(document.querySelectorAll('#second-numbers input:checked')).map(el => parseInt(el.value));
     updateMode();
     generateQuestion();
 }
@@ -71,13 +75,8 @@ function generateQuestion() {
     if (questionCount < totalQuestions) {
         sounds.start.play();
         questionCount++;
-        const min1 = parseInt(document.getElementById('min1').value);
-        const max1 = parseInt(document.getElementById('max1').value);
-        const min2 = parseInt(document.getElementById('min2').value);
-        const max2 = parseInt(document.getElementById('max2').value);
-
-        num1 = getRandomInt(min1, max1);
-        num2 = getRandomInt(min2, max2);
+        num1 = getRandomInt(firstNumbers);
+        num2 = getRandomInt(secondNumbers);
 
         switch (currentMode) {
             case 'multiplication':
@@ -99,6 +98,16 @@ function generateQuestion() {
     } else {
         showResults();
     }
+}
+
+function submitAnswer() {
+    const userAnswer = parseInt(document.getElementById('answer-input').value);
+    if (!isNaN(userAnswer)) {
+        checkAnswer(userAnswer);
+    } else {
+        alert('入力された回答が数字ではありません');
+    }
+    document.getElementById('answer-input').value = '';
 }
 
 function checkAnswer(userAnswer) {
@@ -134,11 +143,13 @@ function checkAnswer(userAnswer) {
             generateQuestion();
         }, 2000);
     } else {
-        const recognizedAnswerElement = document.getElementById('recognized-answer');
-        recognizedAnswerElement.innerText = `認識された回答: ${userAnswer}`;
-        const confirmationElement = document.getElementById('confirmation');
-        confirmationElement.style.display = 'block';
-        pendingAnswer = userAnswer;
+        resultElement.innerText = '残念...！';
+        resultElement.className = 'incorrect-answer';
+        sounds.wrong.play();
+        setTimeout(() => {
+            resultElement.innerText = '';
+            generateQuestion();
+        }, 2000);
     }
 }
 
@@ -222,12 +233,12 @@ function startVoiceRecognition() {
     }
 
     if (currentRecognition) {
-        currentRecognition.stop();
+        currentRecognition.abort(); // stopの代わりにabortを使用
     }
 
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'ja-JP';
-    recognition.interimResults = false;
+    recognition.interimResults = true; // interimResultsをtrueに設定
     recognition.maxAlternatives = 1;
     currentRecognition = recognition;
 
@@ -236,17 +247,29 @@ function startVoiceRecognition() {
     };
 
     recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        processVoiceInput(transcript);
+        const interim_transcript = event.results[0][0].transcript;
+        if (event.results[0].isFinal) {
+            processVoiceInput(interim_transcript);
+        } else {
+            document.getElementById('voice-status').innerText = `音声認識中...: ${interim_transcript}`;
+        }
     };
 
     recognition.onerror = function(event) {
-        alert('音声認識中にエラーが発生しました: ' + event.error);
-        document.getElementById('voice-status').innerText = '';
+        if (event.error === 'aborted') {
+            console.warn('音声認識が中断されました。再試行します。');
+            startVoiceRecognition();
+        } else {
+            alert('音声認識中にエラーが発生しました: ' + event.error);
+            document.getElementById('voice-status').innerText = '';
+        }
     };
 
     recognition.onend = function() {
         document.getElementById('voice-status').innerText = '';
+        if (!pendingAnswer) {
+            startVoiceRecognition();
+        }
     };
 
     recognition.start();
@@ -275,6 +298,7 @@ function confirmAnswer(isConfirmed) {
 
     if (isConfirmed) {
         checkAnswer(pendingAnswer);
+        pendingAnswer = null;
     } else {
         startVoiceRecognition();
     }
